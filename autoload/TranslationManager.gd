@@ -45,9 +45,13 @@ var current_language := DEFAULT_LOCALE setget set_language
 var _loaded_translations := []
 
 
-func _ready() -> void:
-	var current_profile := UserProfiles.get_profile()
-	set_language(current_profile.language)
+# func _ready() -> void:
+#     var current_profile := UserProfiles.get_profile()
+#     set_language(current_profile.language)
+
+func _enter_tree() -> void:
+    var current_profile := UserProfiles.get_profile()
+    set_language(current_profile.language)
 
 
 func get_available_languages() -> Array:
