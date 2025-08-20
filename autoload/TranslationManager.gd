@@ -50,8 +50,10 @@ var _loaded_translations := []
 #     set_language(current_profile.language)
 
 func _init() -> void:
-    var current_profile := UserProfiles.get_profile()
-    set_language(current_profile.language)
+	var current_profile := UserProfiles.get_profile()
+	if current_profile.language == "" or current_profile.language == null:
+		current_profile.language = "zh_Hans"
+	set_language(current_profile.language)
 
 
 func get_available_languages() -> Array:
