@@ -23,7 +23,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           lfs: true
-
+      
+      - run: chmod +x run
       - run: ./run prepare:ci
       - run: ./run export:web
 
