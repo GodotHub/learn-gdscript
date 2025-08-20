@@ -1,0 +1,36 @@
+name: "Export Godot Web"
+
+permissions:
+  contents: write
+
+on:
+  workflow_dispatch:    # 手动触发
+  push:                 # push 自动触发
+    branches:
+      - main
+
+env:
+  GODOT_VERSION: 3.4.4
+  git_branch: ${{ github.ref_name }}
+
+jobs:
+  export-web:
+    name: Web Export
+    runs-on: ubuntu-latest
+    container: barichello/godot-ci:3.4.4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - run: ./run prepare:ci
+      - run: ./run export:web
+
+      - name: Deploy to GitHub Pages 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: build/web/main
+          clean: true   # 清理旧文件，避免缓存问题
