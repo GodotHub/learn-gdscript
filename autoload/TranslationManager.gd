@@ -49,7 +49,7 @@ var _loaded_translations := []
 #     var current_profile := UserProfiles.get_profile()
 #     set_language(current_profile.language)
 
-func _enter_tree() -> void:
+func _init() -> void:
     var current_profile := UserProfiles.get_profile()
     set_language(current_profile.language)
 
