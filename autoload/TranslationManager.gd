@@ -71,6 +71,27 @@ func get_available_languages() -> Array:
 	return languages
 
 
+func _retranslate_tree() -> void:
+    if not is_inside_tree():
+        return
+    _retranslate_node(get_tree().root)
+
+func _retranslate_node(n: Node) -> void:
+    # 刷新常见可翻译属性
+    if n is Control:
+        if n.has_method("get") and n.has_method("set"):
+            if n.has_method("set_text") and n.has_method("get"):
+                var t = n.get("text")
+                if typeof(t) == TYPE_STRING and t != "":
+                    n.set("text", tr(t))
+            if n.has_method("set_hint_tooltip"):
+                var tt = n.get("hint_tooltip")
+                if typeof(tt) == TYPE_STRING and tt != "":
+                    n.set("hint_tooltip", tr(tt))
+    for c in n.get_children():
+        _retranslate_node(c)
+
+
 func set_language(language_code: String) -> void:
 	if current_language == language_code:
 		return
@@ -143,6 +164,9 @@ func set_language(language_code: String) -> void:
 
 	# Set the language to update the app.
 	TranslationServer.set_locale(current_language)
+
+	_retranslate_tree()
+
 	current_profile.language = current_language
 	current_profile.save()
 	emit_signal("translation_changed")
